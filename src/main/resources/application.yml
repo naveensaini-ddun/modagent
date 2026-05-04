@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: modagent
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: non_null
+  datasource:
+    url: jdbc:h2:mem:modagent;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2
+
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %-5level [%X{snippetId:-}] %logger{36} - %msg%n"
+  level:
+    com.legacyfirst.modagent: DEBUG
+
+modagent:
+  llm:
+    provider: ${MODAGENT_LLM_PROVIDER:stub}
+    api-key: ${MODAGENT_LLM_API_KEY:}
+    model: ${MODAGENT_LLM_MODEL:stub-model}
+    timeout-seconds: ${MODAGENT_LLM_TIMEOUT_SECONDS:30}
+  target:
+    framework: ${MODAGENT_TARGET_FRAMEWORK:spring-boot}
