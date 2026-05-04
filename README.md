@@ -39,6 +39,18 @@ Boot logs `ModAgent ready — llm.provider=… target.framework=…` on startup,
 | `GET` | `/report/{snippet_id}` | full migration report |
 | `GET` | `/patterns` | list detectable anti-patterns |
 
-## Status
+## Project layout
 
-Scaffolding only — controllers, services, rule engine, and LLM client are still being built. See `HANDOFF.md` for the implementation plan.
+```
+com.legacyfirst.modagent
+├── web/        controllers + DTOs + global exception handler (422 / 404)
+├── service/    AnalysisService, MigrationService, ReportService
+├── analysis/   PatternCatalogue (anti-pattern catalog returned by /patterns)
+├── risk/       RuleEngine + 3 deterministic rules (hardcoded creds, raw SQL, On Error Resume Next)
+├── codegen/    CodeGenerator strategy (SpringBootCodeGenerator only for MVP)
+├── checklist/  ChecklistBuilder (pattern → checklist item mapping)
+├── llm/        LlmClient port + StubLlmClient (env-toggled, no real LLM in MVP)
+├── persistence/ SnippetEntity (H2) + SnippetRepository + ReportMapper (JSON ↔ MigrationReport)
+├── domain/     records + enums (Snippet, MigrationReport, RiskLevel, MigrationStatus, …)
+└── config/     ModAgentProperties + StartupLogger
+```
